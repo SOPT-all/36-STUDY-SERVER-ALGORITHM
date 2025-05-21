@@ -2,7 +2,11 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in); //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                                             //StringBuilder sb = new StringBuilder();
+                                             //String[] input = br.readLine().split(" ");
+                                             //int n = Integer.parseInt(input[0]);
+                                             //int m = Integer.parseInt(input[1]);
 
         int n = sc.nextInt();
         int m = sc.nextInt();
