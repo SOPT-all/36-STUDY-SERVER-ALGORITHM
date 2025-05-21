@@ -40,7 +40,7 @@ public class BOJ_2178 {
         System.out.print(graph[ROW - 1][COL - 1]);
     }
 
-    static void bfs() {
+    private static void bfs() {
         Queue<Point> queue = new LinkedList<>();
         queue.add(new Point(0, 0));
         visited[0][0] = true;
