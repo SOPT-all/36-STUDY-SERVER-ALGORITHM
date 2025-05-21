@@ -1,69 +1,53 @@
 package org.week3;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class BOJ_13549 {
     static int MAX = 100000;
-    static int N;
-    static int K;
-    static boolean[] visited;
-    static int minTime = Integer.MAX_VALUE;
+    static int[] minTime = new int[MAX + 1];
+    // minTim[i] = -1 -> i는 방문 X
+    // minTime[i]: i까지 걸리는 최소시간
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        K = Integer.parseInt(st.nextToken());
 
-        visited = new boolean[MAX + 1];
+        int N = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
+
+        Arrays.fill(minTime, -1); // -1은 아직 방문 안 함 의미
 
         bfs(N);
-
-        System.out.println(minTime);
+        System.out.println(minTime[K]);
     }
 
+    // [ 0-1 BFS ]
+    // 가중치(걸리는 시간) 0과 1로 이뤄진 그래프에서 최단 경로를 찾는 문제
     private static void bfs(int start) {
-        Queue<Node> queue = new LinkedList<>();
-        queue.add(new Node(start, 0));
-        visited[start] = true;
+        Deque<Integer> deque = new ArrayDeque<>();
+        minTime[start] = 0;
+        deque.add(start);
 
-        while (!queue.isEmpty()) {
-            Node node = queue.poll();
-            int curX = node.x;
-            int time = node.time;
-            visited[curX] = true;
+        while (!deque.isEmpty()) {
+            int curX = deque.poll();
 
-            if (curX == K) {
-                minTime = Math.min(minTime, time);
-            }
+            int[] nextX = {curX * 2, curX - 1, curX + 1};
+            for (int i = 0; i < 3; i++) {
+                int nx = nextX[i];
 
-            if (curX * 2 <= MAX && !visited[curX * 2]) {
-                queue.add(new Node(curX * 2, time));
-            }
-            if (curX + 1 <= MAX && !visited[curX + 1]) {
-                queue.add(new Node(curX + 1, time + 1));
-            }
-            if (curX - 1 >= 0 && !visited[curX - 1]) {
-                queue.add(new Node(curX - 1, time + 1));
+                if (nx < 0 || nx > MAX) continue;
+                if (minTime[nx] != -1) continue; // 이미 방문한 지점인 경우 = 이미 최소 도달 시간이 확정
+
+                // 0초에 가는 경우(순간이동)가 우선 순위 높음 -> Deque 앞에 넣는다
+                if (i == 0) {
+                    minTime[nx] = minTime[curX];
+                    deque.addFirst(nx);
+                } else {
+                    minTime[nx] = minTime[curX] + 1;
+                    deque.addLast(nx);
+                }
             }
         }
     }
-
-    private static class Node {
-        int x;
-        int time;
-        private Node(int x, int time) {
-            this.x = x;
-            this.time = time;
-        }
-    }
-
-
 }
