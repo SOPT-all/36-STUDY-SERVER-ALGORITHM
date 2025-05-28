@@ -12,12 +12,16 @@ public class BOJ_9252 {
 
         int len1 = str1.length();
         int len2 = str2.length();
-        int[][] dp = new int[len1 + 1][len2 + 1]; // dp[i][j]: str1의 i번째 문자와 str2의 j번째 문자를 비교했을 시점의 LCS 길이
+
+        // dp[i][j]: str1의 i번째 문자와 str2의 j번째 문자를 비교했을 시점에서 도출된 LCS 길이
+        int[][] dp = new int[len1 + 1][len2 + 1];
 
         // 문자가 일치하는 경우: dp[i][j] = dp[i-1][j-1] + 1
         // 문자가 일치하지 않는 경우: dp[i][j] = max(dp[i-1][j], dp[i][j-1])
         // dp[0][j]: C -> A(0) C(1) A(1) Y(1) K(1) P(1)
         // dp[1][j]: A -> A(1) C(1) A(2) Y(2) K(2) P(2)
+        // dp[1][j]: P -> A(1) C(1) A(2) Y(2) K(2) P(3)
+        // bottom-up
         for (int i = 1; i <= len1; ++i) {
             for (int j = 1; j <= len2; ++j) {
                 if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
@@ -35,9 +39,9 @@ public class BOJ_9252 {
                 lcs.append(str1.charAt(i - 1));
                 i--;
                 j--;
-            } else if (dp[i - 1][j] > dp[i][j - 1]) {
+            } else if (dp[i][j] == dp[i - 1][j]) { // LCS 길이가 유지되는 쪽으로 이동
                 i--;
-            } else {
+            } else { // dp[i][j] == dp[i][j-1]
                 j--;
             }
         }
