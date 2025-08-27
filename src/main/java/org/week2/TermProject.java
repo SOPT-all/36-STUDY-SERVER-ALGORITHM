@@ -49,6 +49,7 @@ public class TermProject {
         System.out.println(sb);
     }
 
+    //1->3, 2->1, 3->3
     public static void dfs_recursion(int cur) {
         if (cycleCheckConfirmed[cur]) return; // 팀 가능 여부를 이미 체크
         if(visited[cur]) { // 해당 노드를 이미 방문한 적이 있다 -> 사이클
